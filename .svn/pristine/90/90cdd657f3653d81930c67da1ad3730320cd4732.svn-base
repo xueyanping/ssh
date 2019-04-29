@@ -1,0 +1,70 @@
+package web.action;
+
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Restrictions;
+
+import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.ActionSupport;
+import com.opensymphony.xwork2.ModelDriven;
+
+import dao.BaseDaoImpl;
+import domain.Customer;
+import service.CustomerService;
+import utils.PageBean;
+
+public class CustomerAction extends ActionSupport implements ModelDriven<Customer> {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	CustomerService customerService;
+	Customer customer = new Customer();
+	private Integer pageSize;
+	private Integer currentPage;
+
+	public String list() throws Exception {		
+		
+		DetachedCriteria dc = DetachedCriteria.forClass(Customer.class);
+		if (StringUtils.isNotBlank(customer.getCust_name())) {
+			
+			dc.add(Restrictions.like("cust_name", "%" + customer.getCust_name() + "%"));
+			
+		}
+		
+		PageBean pageList = customerService.getPageBean(dc, pageSize, currentPage);
+		
+		ActionContext.getContext().put("list", pageList);
+		return "list";
+	}
+
+	public void setCustomerService(CustomerService customerService) {
+		this.customerService = customerService;
+	}
+
+	public Integer getCurrentPage() {
+		return currentPage;
+	}
+
+	public void setCurrentPage(Integer currentPage) {
+		this.currentPage = currentPage;
+	}
+
+	
+	public Integer getPageSize() {
+		return pageSize;
+	}
+
+	public void setPageSize(Integer pageSize) {
+		this.pageSize = pageSize;
+	}
+
+	@Override
+	public Customer getModel() {
+
+		return customer;
+	}
+
+}

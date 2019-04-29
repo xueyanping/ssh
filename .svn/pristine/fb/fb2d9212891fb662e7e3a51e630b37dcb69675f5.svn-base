@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<!-- # struts.objectFactory = spring 将action的创建交给Spring struts.objectFactory.spring.autoWire 
+		= name spring负责自动装配struts的依赖属性 -->
+	<constant name="struts.objectFactory" value="spring"></constant>
+	<!-- <constant name="struts.objectFactory.spring.autoWire" value="name"></constant> -->
+
+	<!-- Spring 完全负责action的创建与书属性注入需要 相应的action的class属性填写对应的bean的name属性名 -->
+	<package name="crm" namespace="/" extends="struts-default">
+		<global-exception-mappings>
+			<exception-mapping result="error"
+				exception="java.lang.RuntimeException"></exception-mapping>
+		</global-exception-mappings>
+		<action name="UserAction_*" class="userAction" method="{1}">
+			<result name="success">/success.jsp</result>
+			<result name="error" >/login.jsp</result>
+		</action>
+		
+		<action name="CustomerAction_*" class="customerAction" method="{1}">
+			<result name="list">/jsp/customer/list.jsp</result>
+			
+		</action>
+	</package>
+
+</struts>

@@ -1,0 +1,99 @@
+package dao;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.orm.hibernate5.HibernateCallback;
+import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
+
+import domain.User;
+
+public class UserDaoImpl extends HibernateDaoSupport implements UserDao {	
+
+	@Override
+	public User getByUserCode( final String usercode) {	
+		System.out.println("usercode="+usercode);
+		//方法一
+		DetachedCriteria criteria = DetachedCriteria.forClass(User.class);
+		 criteria.add(Restrictions.eq("user_code", usercode));
+		 List<User> user_list =  (List<User>) getHibernateTemplate().findByCriteria(criteria);
+		 if(user_list == null || user_list.size() <= 0) {
+			 return null;
+			 
+		 }else {
+//			 System.out.println(user_list.get(0));
+			 return user_list.get(0);
+			 
+			 
+		 }
+		 
+		//方法二
+//		return getHibernateTemplate().execute(new HibernateCallback<User>() {	
+				
+//			@Override
+//			public User doInHibernate(Session session) throws HibernateException {
+				/*String hql = "from User where user_code=?";				
+				Query query = session.createQuery(hql);
+				query.setParameter(0, usercode);
+				User user = (User) query.uniqueResult();*/
+				
+//				DetachedCriteria criteria = DetachedCriteria.forClass(User.class);
+//				 criteria.add(Restrictions.eq("user_code", usercode));
+//				 List<User> user_list =  (List<User>) getHibernateTemplate().findByCriteria(criteria);
+//				 if(user_list == null || user_list.size() <= 0) {
+//					 return null;
+//					 
+//				 }else {
+////					 System.out.println(user_list.get(0));
+//					 return user_list.get(0);
+//					 
+//					 
+//				 }
+				
+//			}
+//		});
+	}
+
+	
+	@Override
+	public void save(User u) {
+		getHibernateTemplate().save(u);
+		
+	}
+	
+	@Override 
+	public User getByUser(User user) {
+		return getHibernateTemplate().execute(new HibernateCallback<User>() {
+
+			@Override
+			public User doInHibernate(Session arg0) throws HibernateException {
+				User u = null;
+				DetachedCriteria criteria = DetachedCriteria.forClass(User.class);
+				Map map = new HashMap<>();
+				map.put("user_code", user.getUser_code());
+				map.put("user_password", user.getUser_password());
+				criteria.add(Restrictions.allEq(map));
+				List<User> user_list = (List<User>) getHibernateTemplate().findByCriteria(criteria);
+				
+				if(user_list == null || user_list.size() <= 0) {
+					 return null;
+					 
+				 }else {
+					// System.out.println(user_list.get(0));
+					 return user_list.get(0);
+					 
+					 
+				 }
+			}
+		});
+	}
+
+}

@@ -1,0 +1,116 @@
+package utils;
+
+import java.util.List;
+
+import org.hibernate.criterion.DetachedCriteria;
+
+import domain.Customer;
+
+public class PageBean {
+
+	private Integer currentPage;
+	
+	private Integer pageSize;
+	
+	private Integer totalCount;
+	
+	private Integer totalPage;
+	
+	private DetachedCriteria dc;
+	
+	private List list;
+	
+	
+	public PageBean(DetachedCriteria dc,Integer pageSize,Integer currentPage) {
+		this.dc = dc;
+		
+		this.pageSize = pageSize;
+		
+		this.currentPage = currentPage;
+		
+		if(pageSize == null) {
+			pageSize = 3;
+		}
+		
+		if(currentPage == null ) {
+			currentPage = 1;
+		}
+		
+		if(currentPage >= totalPage) {
+			currentPage = totalPage;
+			
+		}
+		
+		if(currentPage <= 1) {
+			currentPage = 1;
+		}
+		
+		
+	}
+
+
+	public Integer getCurrentPage() {
+		return currentPage;
+	}
+
+
+	public void setCurrentPage(Integer currentPage) {
+		this.currentPage = currentPage;
+	}
+
+
+	public Integer getPageSize() {
+		return pageSize;
+	}
+
+
+	public void setPageSize(Integer pageSize) {
+		this.pageSize = pageSize;
+	}
+
+
+	public Integer getTotalCount() {
+		return totalCount;
+	}
+
+
+	public void setTotalCount(Integer totalCount) {
+		this.totalCount = totalCount;
+	}
+
+
+	public Integer getTotalPage() {
+		return totalPage;
+	}
+
+
+	public void setTotalPage(Integer totalPage) {
+		this.totalPage = totalPage;
+	}
+
+
+	public DetachedCriteria getDc() {
+		return dc;
+	}
+
+
+	public void setDc(DetachedCriteria dc) {
+		this.dc = dc;
+	}
+
+
+	public List getList() {
+		return list;
+	}
+
+
+	public void setList(List list) {
+		this.list = list;
+	}
+
+
+	
+	
+	
+	
+}

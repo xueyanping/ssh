@@ -1,0 +1,11 @@
+package dao;
+
+import java.io.Serializable;
+
+import domain.Customer;
+
+public class CustomerDaoImpl extends BaseDaoImpl<Customer> implements CustomerDao{
+
+	
+
+}
